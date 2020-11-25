@@ -1,9 +1,12 @@
 var express = require('express');
+var multer = require('multer');
 var router = express.Router();
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const Products = require('../models/products');
 var request = require('request');
+const multerConfig = require('../config/multer')
+
+const Products = require('../models/products');
+const Images = require('../models/images');
+
 
 /* GET users listing. */
 router.get('/', async function(req, res, next) {
@@ -58,6 +61,22 @@ router.post('/', async function(req, res, next) {
       error
     }) 
   }
+});
+
+router.post('/image', multer(multerConfig).single('file'), async (req, res, next) => {
+  const { originalName: name, size, filename: key, location: url = '' } = req.file;
+  
+  const post = new Images({
+    name,
+    size,
+    key: req.file.filename,
+    url: ''
+  })
+  await post.save()
+
+  console.log(post);
+  return res.json(post)
+
 });
 
 
