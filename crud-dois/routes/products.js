@@ -64,13 +64,13 @@ router.post('/', async function(req, res, next) {
 });
 
 router.post('/image', multer(multerConfig).single('file'), async (req, res, next) => {
-  const { originalName: name, size, filename: key, location: url = '' } = req.file;
+  const { originalName: name, size, key, location: url = '' } = req.file;
   
   const post = new Images({
     name,
     size,
-    key: req.file.filename,
-    url: ''
+    key,
+    url
   })
   await post.save()
 
