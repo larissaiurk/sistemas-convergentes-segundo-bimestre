@@ -11,7 +11,8 @@ const cors = require('cors');
 
 const mongoose = require('mongoose');
 const morgan = require('morgan');
-mongoose.connect('mongodb+srv://development:S7FOgGx5YFsUKJfB@cluster0.j9yts.mongodb.net/sistemasconvergentes-2?retryWrites=true&w=majority', {
+
+mongoose.connect(`mongodb+srv://${process.env.MONGO_HOST}:${process.env.MONGO_PASSWORD}@cluster0.j9yts.mongodb.net/${process.env.MONGO_BD}?retryWrites=true&w=majority`, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 }).then(()=> {
