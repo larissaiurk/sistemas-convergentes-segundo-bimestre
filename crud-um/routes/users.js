@@ -84,7 +84,7 @@ router.put('/:id', async function(req, res, next) {
     }
 
     const { id } = req.params
-    const { emoji, role } = req.body
+    const { emoji, role, password } = req.body
 
     const user = await Users.findById({_id: id})
     if(!user){
@@ -92,19 +92,24 @@ router.put('/:id', async function(req, res, next) {
         msg: 'Unable find user...'
       })
     }
-
-    const roleUser = await Roles.findOne({
-      name: role
-    })
-
-    if(!roleUser){
-      return res.status(400).json({
-        msg: 'Unable find role...'
+    if(role){
+      const roleUser = await Roles.findOne({
+        name: role
       })
+  
+      if(!roleUser){
+        return res.status(400).json({
+          msg: 'Unable find role...'
+        })
+      }
+
+      user.role = roleUser
     }
 
-    user.emoji = emoji
-    user.role = roleUser
+    if(emoji)
+      user.emoji = emoji
+    if(password)
+    user.password = password    
 
     await user.save()
     return res.status(200).json('User successfully updated!')

@@ -2,6 +2,7 @@ var express = require('express');
 var multer = require('multer');
 var router = express.Router();
 var request = require('request');
+const api = require('../services/api')
 const multerConfig = require('../config/multer')
 
 const Products = require('../models/products');
@@ -57,11 +58,34 @@ router.post('/', async function(req, res, next) {
     //     error
     //   }) 
     // }
+      const code = req.body.categoryCode
+      var category = null;
+      var categories = [];
+
+     try {
+      await api.get('http://localhost:3002/category')
+        .then(function(response){
+          
+          categories = response.data;
+
+        });
+      
+     } catch (error) {
+       console.log(error)
+       return res.status(500).json({
+         msg: 'Category Error...',
+         error
+       }) 
+     }
+
+     category = categories.find(item => item.code === code)
+     
 
     const newProduct = new Products({
       name: req.body.name,
       description: req.body.description,
       price: req.body.price,
+      categoryId: category._id
     })
 
     await newProduct.save()
