@@ -4,7 +4,20 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+var categoryRouter = require('./routes/category');
+
+const cors = require('cors');
+
+const mongoose = require('mongoose')
+mongoose.connect('mongodb+srv://development:S7FOgGx5YFsUKJfB@cluster0.j9yts.mongodb.net/sistemasconvergentes-3?retryWrites=true&w=majority', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+}).then(()=> {
+  console.log('Connection OK');
+}).catch((err) => {
+  console.log(err);
+})
+
 
 var app = express();
 
@@ -15,6 +28,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/category', categoryRouter);
 
 module.exports = app;
