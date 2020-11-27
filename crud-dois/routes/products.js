@@ -77,6 +77,7 @@ router.post('/', async function(req, res, next) {
 });
 
 router.post('/image', multer(multerConfig).single('file'), async (req, res, next) => {
+  console.log('teste')
   const { originalName: name, size, key, location: url = '' } = req.file;
   
   const post = new Images({
